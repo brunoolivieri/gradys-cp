@@ -1,0 +1,40 @@
+https://raspberrypi.stackexchange.com/questions/78991/running-a-script-after-an-internet-connection-is-established
+
+
+
+Now create a new service for my_script.sh:
+
+pi ~$ sudo systemctl edit --force --full my_script.service
+
+Insert this statements with your settings, save them and quit the editor:
+
+[Unit]
+Description=My Script Service
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi
+ExecStart=/home/pi/my_script.sh
+
+[Install]
+WantedBy=multi-user.target
+
+Check the new service:
+
+pi ~$ systemctl status my_script.service
+● my_script.service - My Script Service
+   Loaded: loaded (/etc/systemd/system/my_script.service; disabled; vendor preset: enabled)
+   Active: inactive (dead)
+
+Now we can enable and test our service:
+
+pi ~$ sudo systemctl enable my_script.service
+pi ~$ sudo systemctl start my_script.service
+pi ~$ sudo systemctl start my_script.service
+pi ~$ cat /tmp/my_script.out
+
+
+
